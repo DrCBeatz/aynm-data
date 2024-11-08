@@ -1,1 +1,0 @@
-Scripts for Purchase Orders in Stocky and B2B websites
