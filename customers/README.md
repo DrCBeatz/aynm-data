@@ -90,7 +90,3 @@ John,Doe,johndoe@example.com,123-456-7890,yes,local
 ## License
 
 This project is licensed under the MIT License.
-
-## Contact
-
-For any questions or feedback, please open an issue or reach out to the repository owner.
