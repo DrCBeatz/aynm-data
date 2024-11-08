@@ -1,6 +1,6 @@
-# Label creation script for creating printed labels with scannable barcodes.
+# Label creation script for printing product labels with scannable barcodes.
 
-This directory includes a script, `create-label.py`, that generates label files for P-touch editor v5.4+ software (for the Brother QL-570 Label Printer), based on product data from a CSV file exported from Shopify. It updates XML templates with product details, creates labels, and compresses files for easy distribution.
+This directory includes a script, `create-label.py`, that generates label files for P-touch Editor v5.4+ software (for the Brother QL-570 Label Printer), based on product data from a CSV file exported from Shopify. It updates XML templates with product details, creates labels, and compresses files for easy distribution. Scannable barcodes are automatically generated in P-touch Editor if the UPC for the product is included in the Shopify product CSV file.
 
 ## Directory Structure
 
