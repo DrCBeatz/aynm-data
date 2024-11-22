@@ -1,3 +1,5 @@
+# create-label.py
+
 import shutil
 import argparse
 from compress import compress
@@ -5,10 +7,8 @@ import pandas as pd
 from replace import nth_repl_all, replace_file_text
 
 # Default CSV file name
-DEFAULT_INPUT_FILE = 'products_export.csv'
+DEFAULT_INPUT_FILE = 'products_export.csv' # csv file is exported from Shopify containing the product to create label for
 output_file = "label.xml"
-sale = False
-source_file = 'template_sale.xml' if sale else 'template_reg.xml'
 lbx_files = ['label.xml', 'prop.xml', 'Object0.bmp']
 title_string = """[TITLE]"""
 i = 0
@@ -17,9 +17,13 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Create a label from a CSV file.')
     parser.add_argument('-f', '--file', type=str, default=DEFAULT_INPUT_FILE, help='CSV file to use for creating the label')
+    parser.add_argument('--sale', action='store_true', help='Toggle to use the sale template')
     args = parser.parse_args()
 
     input_file = args.file
+    sale = args.sale  # Set the sale variable based on the command-line argument
+
+    source_file = 'template_sale.xml' if sale else 'template_reg.xml'
 
     # Copy the template file to the output file
     shutil.copyfile(source_file, output_file)
