@@ -1,7 +1,6 @@
 import zlib
 import zipfile
 
-# def compress(file_names, output_label):
 def compress(file_names):
 
     path = ''
@@ -24,7 +23,3 @@ def compress(file_names):
     finally:
         # Don't forget to close the file!
         zf.close()
-
-
-# file_names= ["test_file.txt", "test_file2.txt"]
-# compress(file_names)
