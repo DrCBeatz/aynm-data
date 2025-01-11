@@ -5,7 +5,7 @@ The `webscraping` directory contains scripts and tools for scraping product info
 
 ## Files Overview
 
-### 1. Coast Webscrape.ipynb
+### 1. coast_webscrape.ipynb
 This Jupyter Notebook is designed to scrape product information from the Coast music supplier's B2B website. The script logs into the website, searches for specified product SKUs, extracts relevant details (e.g., vendor, title, price, description, image URL), and saves the results into a CSV file.
 
 **Key Features:**
@@ -13,6 +13,7 @@ This Jupyter Notebook is designed to scrape product information from the Coast m
 - Supports headless mode for background execution.
 - Extracts detailed product information, including pricing and descriptions.
 - Saves results in a CSV format suitable for Shopify.
+- Also checks and saves in CSV file whether product is in-stock currently out of stock.
 
 ---
 
