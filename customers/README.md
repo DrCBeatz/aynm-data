@@ -1,31 +1,31 @@
 
 # Customer Data Processing for Draw Submissions
 
-This repository provides scripts for processing handwritten customer data collected via physical draw cards, using Microsoft Azure Cognitive Services for OCR. The workflow involves scanning cards for customer name, email, and phone number, cleaning the OCR output, and formatting it into a CSV for Shopify to add customers to the mailing list.
+This repository provides scripts for processing handwritten customer data collected via physical draw cards, using Amazon's Textract service for OCR. The workflow involves scanning cards for customer name, email, and phone number, cleaning the OCR output, and formatting it into a CSV for Shopify to add customers to the mailing list.
 
 ## Files
 
 - `customer_csv.ipynb`: Converts the final CSV into a Shopify-compatible format for importing customer data.
 - `draw.py`: Contains a list of image filenames to process for OCR.
 - `init_handprint.sh`: Initializes the `handprint` tool with Microsoft Azure credentials.
-- `myazurecredentials.json`: Stores Azure Vision API credentials (subscription key and endpoint).
+- `awscredentials.json`: Stores AWS credentials (AWS access key, AWS secret access key, AWS region).
 - `name_script.py`: Converts manually cleaned OCR text into a structured CSV file.
 - `names_txt.py`: Contains manually cleaned names, emails, and phone numbers in a structured text format.
 - `ocr.py`: Performs OCR on each image in `draw.py`, using Azure's Vision API.
 
 ## Workflow
 
-### Step 1: Initialize Azure OCR
+### Step 1: Initialize Amazon-Textract OCR
 
-Use the `init_handprint.sh` script to initialize the `handprint` tool with Microsoft Azure credentials:
+Use the `init_handprint.sh` script to initialize the `handprint` tool with AWS credentials:
 ```bash
 ./init_handprint.sh
 ```
-Ensure your credentials are stored in `myazurecredentials.json`.
+Ensure your credentials are stored in `awscredentials.json`.
 
 ### Step 2: Run OCR on Images
 
-Run `ocr.py` to perform OCR on each image listed in `draw.py`. This script reads images, processes each using Microsoft Azure's OCR, and outputs the initial data for manual review.
+Run `ocr.py` to perform OCR on each image listed in `draw.py`. This script reads images, processes each using AWS' Textract OCR, and outputs the initial data for manual review.
 
 ```bash
 python ocr.py
@@ -54,7 +54,7 @@ Use the Jupyter notebook `customer_csv.ipynb` to further process `draw.csv` into
 
 ### `init_handprint.sh`
 
-This shell script authenticates `handprint` with Microsoft Azure for OCR.
+This shell script authenticates `handprint` with AWS for OCR.
 
 ### `ocr.py`
 
