@@ -1,1 +1,1 @@
-handprint -a microsoft myazurecredentials.json
+handprint -a amazon-textract awscredentials.json
