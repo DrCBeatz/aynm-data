@@ -41,8 +41,8 @@ chrome_options.add_experimental_option(
 # ------------------------------------------------------------------------------
 # 2. Configure Inputs & Outputs
 # ------------------------------------------------------------------------------
-input_file = ""
-output_file = "yamaha_webscrape_output.csv"
+input_file = "yamaha_products4.csv"
+output_file = input_file[:-4] + "_output.csv"
 user_name = config("YAMAHA_B2B_USERNAME")
 password = config("YAMAHA_B2B_PASSWORD")
 url = "https://mus.ca.yamaha.com/s/login/?language=en_US"
@@ -51,8 +51,9 @@ url = "https://mus.ca.yamaha.com/s/login/?language=en_US"
 # 3. Prepare Product List
 # ------------------------------------------------------------------------------
 if input_file:
-    # If we have an input CSV, read the SKUs from there
+    # Read the input CSV, then drop rows where "Variant SKU" is NaN
     product_df = pd.read_csv(input_file)
+    product_df.dropna(subset=["Variant SKU"], inplace=True)
     product_list = product_df["Variant SKU"].tolist()
 else:
     # Fallback: define products directly here
@@ -67,7 +68,7 @@ for product in product_list:
 # ------------------------------------------------------------------------------
 service = Service()
 driver = webdriver.Chrome(service=service, options=chrome_options)
-driver.maximize_window()  # You can comment this out if you prefer smaller window
+driver.maximize_window()
 
 print(f"Opening {url} in Chrome browser...")
 driver.get(url)
@@ -112,14 +113,30 @@ for product in product_list:
         search_input = WebDriverWait(driver, WAIT_TIME).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "input.search-input-with-button"))
         )
+        # Thoroughly clear the field
+        search_input.click()
         search_input.clear()
+        search_input.send_keys(Keys.CONTROL + "a")
+        search_input.send_keys(Keys.DELETE)
+
+        # Now type the product and press Enter
         search_input.send_keys(product)
         search_input.send_keys(Keys.RETURN)
     except Exception as e:
         print(f"[{product}] Could not perform search:", e)
         products_not_found_list.append(product)
-        # We'll store a row with None data, or skip entirely
-        rows.append([product, None, None])  
+        rows.append([product, None, None])
+        # Attempt to clear input again before moving on
+        try:
+            search_input = WebDriverWait(driver, WAIT_TIME).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, "input.search-input-with-button"))
+            )
+            search_input.click()
+            search_input.clear()
+            search_input.send_keys(Keys.CONTROL + "a")
+            search_input.send_keys(Keys.DELETE)
+        except:
+            pass
         continue
 
     # --------------------------------------------------------------------------
@@ -135,6 +152,17 @@ for product in product_list:
         print(f"[{product}] Could not find/click product link:", e)
         products_not_found_list.append(product)
         rows.append([product, None, None])
+        # Attempt to clear input again before moving on
+        try:
+            search_input = WebDriverWait(driver, WAIT_TIME).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, "input.search-input-with-button"))
+            )
+            search_input.click()
+            search_input.clear()
+            search_input.send_keys(Keys.CONTROL + "a")
+            search_input.send_keys(Keys.DELETE)
+        except:
+            pass
         continue
 
     # --------------------------------------------------------------------------
@@ -144,12 +172,22 @@ for product in product_list:
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "b2b_buyer_product_details-summary"))
         )
-        
         time.sleep(2)
     except TimeoutException:
         print(f"[{product}] Timed out waiting for product details to load.")
         products_not_found_list.append(product)
         rows.append([product, None, None])
+        # Attempt to clear input again before moving on
+        try:
+            search_input = WebDriverWait(driver, WAIT_TIME).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, "input.search-input-with-button"))
+            )
+            search_input.click()
+            search_input.clear()
+            search_input.send_keys(Keys.CONTROL + "a")
+            search_input.send_keys(Keys.DELETE)
+        except:
+            pass
         continue
 
     # --------------------------------------------------------------------------
@@ -194,6 +232,17 @@ for product in product_list:
     # --------------------------------------------------------------------------
     rows.append([product, map_price, wsp_price])
 
+    # (Optional) Clear the search input at the end of iteration:
+    try:
+        search_input = WebDriverWait(driver, WAIT_TIME).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "input.search-input-with-button"))
+        )
+        search_input.click()
+        search_input.clear()
+        search_input.send_keys(Keys.CONTROL + "a")
+        search_input.send_keys(Keys.DELETE)
+    except:
+        pass
 
 # ------------------------------------------------------------------------------
 # 7. Build final DataFrame
