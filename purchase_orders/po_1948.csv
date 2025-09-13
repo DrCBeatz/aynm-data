@@ -1,0 +1,4 @@
+SKU,Qty Ordered,Cost (base),Total Cost (base)
+ABC123,10,15.00,150.00
+DEF456,5,20.00,100.00
+DEF456,3,20.00,60.00
